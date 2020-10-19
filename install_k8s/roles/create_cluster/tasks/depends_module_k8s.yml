@@ -1,0 +1,10 @@
+- name: Install Pip
+  apt:
+    name: python-pip
+    state: present
+
+- name: Install Depends do Modulo do K8s
+  pip:
+    name:
+      - openshift
+      - PyYAML

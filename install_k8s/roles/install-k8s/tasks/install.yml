@@ -1,0 +1,37 @@
+- name: Get Url Script Docker
+  get_url:
+    url: "{{ url_docker }}"
+    dest: "{{ url_tmp }}"
+    mode: 0775
+  register: get_docker
+
+- name: Install Docker
+  shell: "{{ url_tmp }}"
+  when:
+    - get_docker.failed | bool == false
+  register: install_docker
+  notify:
+    - Restart Docker
+
+- name: Adicionando as Chaves do repo apt fo k8s
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+
+- name: Adicionando o Repo o k8s
+  apt_repository:
+    repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+
+- name: Instalando os pacotes kubeadm, kubelet e kubectl
+  apt:
+    name: "{{ packages }}"
+  vars:
+    packages:
+      - kubeadm
+      - kubelet
+      - kubectl
+  notify:
+    - Restart Kubelet
+
+- name: Auto Completion kubectl
+  shell: kubectl completion bash >/etc/bash_completion.d/kubectl

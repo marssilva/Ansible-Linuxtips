@@ -1,0 +1,9 @@
+---
+# vars file for criando-instancias
+sec_group_name: Sec-Ansible-Kubernetes
+aws_profile: course-ansible
+instance_type: t2.medium
+image_ec2: ami-0817d428a6fb68645
+region_aws: us-east-1
+keypair_aws: ASCES
+count_ec2: 3

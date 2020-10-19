@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: linuxtips-v2
+spec:
+  replicas: {{ number_replicas_new_version }}
+  selector:
+    matchLabels:
+      app: linuxtips
+  template:
+    metadata:
+      labels:
+        app: linuxtips
+        version: {{ new_version }} 
+      annotations:
+        prometheus.io/scrape: "{{ prometheus_scrape }}"
+        prometheus.io/port: "{{ prometheus_port }}"
+    spec:
+      containers:
+      - name: linuxtips
+        image: linuxtips/nginx-prometheus-exporter:{{ new_version }} 
+        env:
+        - name: VERSION
+          value: {{ new_version }}
+        ports:
+        - containerPort: {{ nginx_port }}
+        - containerPort: {{ prometheus_port }}   

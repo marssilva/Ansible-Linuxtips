@@ -1,0 +1,60 @@
+- name: Criando a maquina no EC2
+  local_action:
+    module: ec2
+    group: "{{ sec_group_name }}"
+    instance_type: "{{ instance_type  }}"
+    image: "{{ image_ec2 }}"
+    profile: "{{ aws_profile  }}"
+    wait: yes
+    region: "{{ region_aws }}"
+    keypair: "{{ keypair_aws }}"
+    count: "{{ count_ec2 }}"
+  register: ec2
+
+- name: Adicionando a Instancia no inventário temp - AWS
+  add_host:
+    name: "{{ item.public_ip }}"
+    groups: ansible-course
+  loop: "{{ ec2.instances }}" # Consome o recurso do register ec2
+
+- name: Adicionando o IP Público no arquivo hosts
+  local_action:
+    module: lineinfile
+    path: ./hosts
+    regexp: "{{ item.public_ip }}"
+    insertafter: '\[kubernetes_public\]'
+    line: "{{ item.public_ip }}"
+    #  firstmatch: yes
+    backup: yes
+  loop: "{{ ec2.instances }}"
+
+- name: Adicionando o IP Privado no arquivo hosts
+  local_action:
+    module: lineinfile
+    path: ./hosts
+    regexp: "{{ item.private_ip }}"
+    insertafter: '\[kubernetes_private\]'
+    line: "{{ item.private_ip }}"
+    #  firstmatch: yes
+    backup: yes
+  loop: "{{ ec2.instances }}"
+
+- name: Adicionando TAG na instância EC2 - AWS
+  local_action:
+    module: ec2_tag
+    resource: "{{ item.id }}"
+    region: "{{ region_aws }}"
+    profile: "{{ aws_profile }}"
+    state: present
+    tags:
+      Name: ansible-{{ item.ami_launch_index|int + 1 }}
+      Env: Kubernetes
+  loop: "{{ ec2.instances }}"
+
+- name: Esperando o SSH
+  local_action:
+    module: wait_for
+    host: "{{ item.public_ip }}"
+    port: 22
+    state: started
+  loop: "{{ ec2.instances }}"

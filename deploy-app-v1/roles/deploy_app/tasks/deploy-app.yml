@@ -1,0 +1,40 @@
+- name: Criando o dir do App LinuxTips
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - /opt/linuxtips
+    - /opt/linuxtips/logs
+    - /opt/linuxtips/conf
+  register: create_dir
+
+- name: Copiando o arquivo de Deployment do App para o Host
+  template:
+    src: app-v1.yml.j2
+    dest: "{{ dest_app }}"
+    owner: root
+    group: root
+    mode: 0644
+  register: copy_templante
+
+- name: Copiando o Arquivo dos services da App para o Host
+  copy:
+    src: "{{ item.src  }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: "service_app.yml", dest: "{{ dest_service_app }}" }
+  register: copy_service_file
+
+- name: Criando o Deployment da App LinuxTips
+  k8s:
+    state: present
+    namespace: default
+    src: "{{ dest_app }}"
+  register: deploy_app
+
+- name: Criando o Service da App LinuxTips
+  k8s:
+    state: present
+    namespace: default
+    src: "{{ dest_service_app }}"
+  register: deploy_svc_app

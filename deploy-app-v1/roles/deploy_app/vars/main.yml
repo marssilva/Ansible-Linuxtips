@@ -1,0 +1,9 @@
+---
+# vars file for deploy_app
+number_replicas: 10
+version: 1.0.0
+prometheus_scrape: "true"
+prometheus_port: 32111
+nginx_port: 80
+dest_app: /opt/linuxtips/app-v1.yml
+dest_service_app: /opt/linuxtips/service_app.yml

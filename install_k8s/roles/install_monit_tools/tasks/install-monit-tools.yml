@@ -1,0 +1,15 @@
+- name: Add Helm repo
+  community.kubernetes.helm_repository: # https://docs.ansible.com/ansible/2.10/collections/community/kubernetes/helm_module.html
+    name: stable
+    repo_url: "{{ url_repo_helm }}"
+
+- name: Update Helm
+  shell: helm repo update
+  register: prometheus_repo_update
+
+- name: Install Prometheus Operator
+  community.kubernetes.helm:
+    name: "{{ name_deploy }}"
+    chart_ref: "{{ deploy_prometheus }}"
+    release_namespace: default
+    release_values: {}

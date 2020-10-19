@@ -1,0 +1,4 @@
+---
+# vars file for install-k8s
+url_docker: https://get.docker.com
+url_tmp: /tmp/get_docker.sh

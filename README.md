@@ -18,6 +18,10 @@ Instalando um Cluste k8s com Ansible
 
 - ansible-galaxy collection install community.kubernetes
 
+## Recomendações:
+
+# 
+
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)

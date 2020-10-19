@@ -25,7 +25,7 @@
     insertafter: '\[kubernetes_public\]'
     line: "{{ item.public_ip }}"
     #  firstmatch: yes
-    backup: yes
+    backup: no
   loop: "{{ ec2.instances }}"
 
 - name: Adicionando o IP Privado no arquivo hosts
@@ -36,7 +36,7 @@
     insertafter: '\[kubernetes_private\]'
     line: "{{ item.private_ip }}"
     #  firstmatch: yes
-    backup: yes
+    backup: no
   loop: "{{ ec2.instances }}"
 
 - name: Adicionando TAG na instância EC2 - AWS

@@ -1,7 +1,0 @@
-[local]
-localhost ansible_connection=local ansible_python_interpreter=python gather_facts=false
-
-[kubernetes_public]
-3.236.227.148
-
-[kubernetes_private]

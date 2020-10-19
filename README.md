@@ -26,6 +26,20 @@ Instalando um Cluste k8s com Ansible
 
 > Após roda o playbook **provisioning** e com posse dos IPS da AWS, altere o arquivo "install_k8s/hosts" com base nos inventários acima.
 
+## Execução 
+
+> Sempre acesse a pasta raiz e execute o comando abaixo, exemplo com **provisioning**
+
+1. cd provisioning
+2. ansible-playbook -i hosts main.yml
+
+#### Faça nesta sequência
+
+1. provisioning
+2. install_k8s
+3. deploy-app-v1
+4. deploy-app-v2
+
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)

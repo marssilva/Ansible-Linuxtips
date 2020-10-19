@@ -20,11 +20,14 @@ Instalando um Cluste k8s com Ansible
 
 ## Recomendações:
 
-#  Teste 
-TEste
+```
+Altere a ''keypair_aws'' em "provisioning/roles/criando-instancias/vars/main.yml" de acordo com a sua chave da AWS.
 
-#
+Quando execultar o provisioning, apague os IPS em "provisioning/hosts", em [kubernetes_public] e [kubernetes_private]
 
+Após roda o playbook ''provisioning'' e com posse dos IPS da AWS, altere o arquivo "install_k8s/hosts" com base nos inventários acima.
+
+```
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)

@@ -1,4 +1,0 @@
----
-# tasks file for criando-instancias
-- include: create_group_sec.yml
-- include: provisioning.yml

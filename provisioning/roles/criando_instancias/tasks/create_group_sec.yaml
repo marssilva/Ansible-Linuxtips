@@ -1,6 +1,5 @@
 - name: Criando Sec Group - AWS
-  local_action:
-    module: ec2_group
+  ec2_group:
     name: "{{ sec_group_name }}"
     description: Sec Group Curso Ansible
     profile: "{{ aws_profile }}"

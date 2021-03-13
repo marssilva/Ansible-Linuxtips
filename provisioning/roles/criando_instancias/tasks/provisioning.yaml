@@ -1,6 +1,5 @@
 - name: Criando a maquina no EC2
-  local_action:
-    module: ec2
+  ec2:
     group: "{{ sec_group_name }}"
     instance_type: "{{ instance_type  }}"
     image: "{{ image_ec2 }}"
@@ -18,8 +17,7 @@
   loop: "{{ ec2.instances }}" # Consome o recurso do register ec2
 
 - name: Adicionando o IP Público no arquivo hosts
-  local_action:
-    module: lineinfile
+  lineinfile:
     path: ./hosts
     regexp: "{{ item.public_ip }}"
     insertafter: '\[kubernetes_public\]'
@@ -29,8 +27,7 @@
   loop: "{{ ec2.instances }}"
 
 - name: Adicionando o IP Privado no arquivo hosts
-  local_action:
-    module: lineinfile
+  lineinfile:
     path: ./hosts
     regexp: "{{ item.private_ip }}"
     insertafter: '\[kubernetes_private\]'
@@ -40,8 +37,7 @@
   loop: "{{ ec2.instances }}"
 
 - name: Adicionando TAG na instância EC2 - AWS
-  local_action:
-    module: ec2_tag
+  ec2_tag:
     resource: "{{ item.id }}"
     region: "{{ region_aws }}"
     profile: "{{ aws_profile }}"
@@ -52,8 +48,7 @@
   loop: "{{ ec2.instances }}"
 
 - name: Esperando o SSH
-  local_action:
-    module: wait_for
+  wait_for:
     host: "{{ item.public_ip }}"
     port: 22
     state: started

@@ -13,6 +13,12 @@
   notify:
     - Restart Docker
 
+- name: Remove file scritp docker
+  ansible.builtin.file:
+    path: "{{ url_tmp }}"
+    state: absent    
+  register: remove_scritps_docker_install  
+
 - name: Adicionando as Chaves do repo apt fo k8s
   apt_key:
     url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
